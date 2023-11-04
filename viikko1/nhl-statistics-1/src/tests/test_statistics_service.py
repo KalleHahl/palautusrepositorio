@@ -37,19 +37,19 @@ class TestStatisticsService(unittest.TestCase):
 
     def test_top_method_works(self):
         top_players = self.stats.top(3)
-        self.assertEqual(4, len(top_players))
+        self.assertEqual(3, len(top_players))
 
     def test_top_method_works_goals(self):
-        top_players = self.stats.top(1, SortBy.GOALS)
+        top_players = self.stats.top(2, SortBy.GOALS)
         self.assertEqual('Lemieux', top_players[0].name)
         self.assertEqual("Yzerman", top_players[1].name)
 
     def test_top_method_works_assists(self):
-        top_players = self.stats.top(1, SortBy.ASSISTS)
+        top_players = self.stats.top(2, SortBy.ASSISTS)
         self.assertEqual('Gretzky', top_players[0].name)
         self.assertEqual("Yzerman", top_players[1].name)
 
     def test_top_method_works_points(self):
-        top_players = self.stats.top(1, SortBy.POINTS)
+        top_players = self.stats.top(2, SortBy.POINTS)
         self.assertEqual('Gretzky', top_players[0].name)
         self.assertEqual("Lemieux", top_players[1].name)
