@@ -64,6 +64,50 @@ class TestKauppa(unittest.TestCase):
 
         self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345",'33333-44455',5)
 
+    def test_aloita_asiointi_nollaa_edelliset_tiedot(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345",'33333-44455',10)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345",'33333-44455',6)
+
+    def test_kauppa_pyytaa_uuden_viitenumeron_jokaiselle_maksutapahtumalle(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345",'33333-44455',10)
+
+        self.viitegeneraattori_mock.uusi.return_value = 30
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("jami", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("jami",30,"12345",'33333-44455',6)
+
+    def test_korista_postaminen_toimii(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.poista_korista(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        self.pankki_mock.tilisiirto.assert_called_with("pekka",42,"12345",'33333-44455',5)
+
+
+
+
+               
+
+
 # tehdään toteutus saldo-metodille
 def varasto_saldo(tuote_id):
     if tuote_id == 1:

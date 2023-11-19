@@ -1,9 +1,12 @@
 from kauppa import Kauppa
 from kirjanpito import kirjanpito
-
+from varasto import varasto
+from pankki import pankki
+from viitegeneraattori import viitegeneraattori
 
 def main():
-    kauppa = Kauppa()
+    # käytetään valmiiksi luotuja "oletusarvoisia" varasto-, pankki- ja viitegeneraattoriolioita
+    kauppa = Kauppa(varasto, pankki, viitegeneraattori)
 
     # kauppa hoitaa yhden asiakkaan kerrallaan seuraavaan tapaan:
     kauppa.aloita_asiointi()
